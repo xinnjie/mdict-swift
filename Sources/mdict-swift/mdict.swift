@@ -1,5 +1,5 @@
 import Foundation
-import mdict
+import mdict_cpp
 
 /// Thin Swift wrapper for the C mdict API.
 /// Usage:
