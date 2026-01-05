@@ -1,0 +1,3 @@
+[submodule "Sources/mdict-cpp"]
+	path = Sources/mdict-cpp
+	url = https://github.com/dictlab/mdict-cpp.git
