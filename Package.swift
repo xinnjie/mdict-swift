@@ -9,8 +9,8 @@ let package = Package(
   ],
   products: [
     .library(
-      name: "mdict-swift",
-      targets: ["mdict-swift"])
+      name: "MDict",
+      targets: ["MDict"])
   ],
   targets: [
     // Dependencies
@@ -52,10 +52,10 @@ let package = Package(
 
     // Main Target
     .target(
-      name: "mdict",
+      name: "mdict-cpp",
       dependencies: ["mdictminiz", "mdictminilzo", "mdictturbobase64"],
       path: "Sources/mdict-cpp/src",
-      exclude: ["mydict.cc"],
+      exclude: ["mydict.cc", "include/mdict.h"],
       sources: [
         "mdict.cc",
         "mdict_extern.cc",
@@ -73,17 +73,17 @@ let package = Package(
 
     // Swift Wrapper
     .target(
-      name: "mdict-swift",
-      dependencies: ["mdict"],
+      name: "MDict",
+      dependencies: ["mdict-cpp"],
       path: "Sources/mdict-swift",
       publicHeadersPath: "include"
     ),
 
     // Tests
     .testTarget(
-      name: "mdict-swiftTests",
+      name: "MdictSwiftTests",
       dependencies: [
-        "mdict-swift"
+        "MDict"
       ],
       path: "Tests/mdict-swiftTests",
       resources: [

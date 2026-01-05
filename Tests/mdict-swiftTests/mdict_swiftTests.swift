@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import MdictSwift
+@testable import MDict
 
 enum FixtureError: Error {
   case missing(String)
