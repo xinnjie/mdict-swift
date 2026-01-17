@@ -12,10 +12,12 @@ struct MdictSwiftTests {
   private var mdict: Mdict?
 
   init() throws {
-    guard let dictURL = Bundle.module.url(
-      forResource: "testdict",
-      withExtension: "mdx"
-    ) else {
+    guard
+      let dictURL = Bundle.module.url(
+        forResource: "testdict",
+        withExtension: "mdx"
+      )
+    else {
       throw FixtureError.missing("Could not find testdict.mdx")
     }
     mdict = Mdict(path: dictURL.path)
