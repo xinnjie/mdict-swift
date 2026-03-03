@@ -101,7 +101,8 @@ let package = Package(
       ],
       path: "Tests/mdict-swiftTests",
       resources: [
-        .copy("testdict.mdx")
+        .copy("testdict.mdx"),
+        .copy("fixtures")
       ]
     ),
   ],
