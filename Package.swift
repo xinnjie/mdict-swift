@@ -9,8 +9,14 @@ let package = Package(
   ],
   products: [
     .library(
-      name: "MDict",
-      targets: ["MDict"])
+      name: "mdict",
+      targets: ["MDict"]),
+    .executable(
+      name: "mdict-cli",
+      targets: ["MDictCLI"])
+  ],
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.7.0")
   ],
   targets: [
     // Dependencies
@@ -77,6 +83,14 @@ let package = Package(
       dependencies: ["mdict-cpp"],
       path: "Sources/mdict-swift",
       publicHeadersPath: "include"
+    ),
+    .executableTarget(
+      name: "MDictCLI",
+      dependencies: [
+        "MDict",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "Sources/MDictCLI"
     ),
 
     // Tests
