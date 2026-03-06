@@ -72,6 +72,9 @@ public class Mdict {
     let definition = String(cString: cString)
     free(cString)  // mdict_lookup allocates memory using malloc/calloc
 
+    let trimmedDefinition = definition.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard trimmedDefinition.isEmpty == false else { return nil }
+
     return definition
   }
 
