@@ -99,6 +99,13 @@ struct MdictSwiftTests {
   }
 
   @Test
+  func lookupMissingWordReturnsNil() {
+    let result = mdict?.lookup(word: "word-that-does-not-exist-in-testdict")
+
+    #expect(result == nil)
+  }
+
+  @Test
   func mddFixtureSupportsKeyListing() throws {
     let etymologyMDD = try makeEtymologyMDD()
     let keys = etymologyMDD.getKeys(limit: 5)
