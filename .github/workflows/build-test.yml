@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          lfs: true
 
       - name: Build and test package
         uses: brightdigit/swift-build@v1.5.4
@@ -32,6 +35,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          lfs: true
 
       - name: Build and test package
         uses: brightdigit/swift-build@v1.5.4
