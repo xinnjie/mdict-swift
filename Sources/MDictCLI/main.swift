@@ -35,7 +35,7 @@ private struct Lookup: ParsableCommand {
     }
 
     guard let definition = dict.lookup(word: word), definition.isEmpty == false else {
-      fputs("Word not found: \(word)\n", stderr)
+      FileHandle.standardError.write(Data("Word not found: \(word)\n".utf8))
       throw ExitCode(3)
     }
 

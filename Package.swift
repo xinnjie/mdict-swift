@@ -53,6 +53,8 @@ let package = Package(
       cSettings: [
         .define("NAVX2"),
         .define("NAVX512"),
+        .define("NAVX", .when(platforms: [.linux])),
+        .define("NSSE", .when(platforms: [.linux])),
       ]
     ),
 

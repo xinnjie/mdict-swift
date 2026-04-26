@@ -1,0 +1,50 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-ubuntu:
+    name: Ubuntu Swift 6.0
+    runs-on: ubuntu-latest
+    container: swift:6.0-noble
+    steps:
+      - name: Install Git LFS
+        run: |
+          apt-get update
+          apt-get install -y git-lfs
+
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Build and test package
+        uses: brightdigit/swift-build@v1.5.4
+        with:
+          scheme: mdict-swift-Package
+
+  build-test-macos:
+    name: macOS SwiftPM
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Build and test package
+        uses: brightdigit/swift-build@v1.5.4
+        with:
+          scheme: mdict-swift-Package
