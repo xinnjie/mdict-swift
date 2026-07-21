@@ -11,11 +11,13 @@ A thin Swift wrapper around [MDict-cpp](https://github.com/dictlab/mdict-cpp) fo
 ```text
 .mdx file -> MDict -> lookup(word:)      -> String? (usually raw HTML)
                    -> getKeys(limit:)    -> [String]
+                   -> header             -> MDict.Header
 
 .mdd file -> MDict -> locate(resource:)  -> Data?
                    -> getKeys(limit:)    -> [String]
 
 filename  -> MDict.mimeType(for:)        -> MIME type
+file path -> MDict.readHeader(atPath:)   -> MDict.Header? (header only)
 ```
 
 `MDict` opens one file at a time. A dictionary that references external assets will typically use one `MDict` instance for its `.mdx` content and another for the matching `.mdd` resources. The library returns the stored content; rendering dictionary HTML is the application's responsibility.
@@ -69,7 +71,22 @@ if let definition = dictionary.lookup(word: "hello") {
 }
 
 let firstKeys = dictionary.getKeys(limit: 20)
+print(dictionary.header.title ?? "Untitled")
 ```
+
+Read metadata without loading key or record indexes:
+
+```swift
+if let header = MDict.readHeader(atPath: "/path/to/dictionary.mdx") {
+  print(header.fileKind, header.encoding, header.title ?? "Untitled")
+  print(header.rawAttributes)
+}
+```
+
+`Header` provides normalized fields for common metadata while preserving every
+original XML attribute in `rawAttributes`. This matters because MDX/MDD has no
+single public metadata schema and dictionary generators emit optional and
+extension fields.
 
 ### Load an MDD resource
 
@@ -94,6 +111,8 @@ The Swift API intentionally consists of one type:
 | API | Result |
 | --- | --- |
 | `MDict(path:)` | Opens an MDX or MDD file. Returns `nil` when the file is missing or cannot be parsed. |
+| `header` | Immutable normalized metadata captured when the file is opened. |
+| `MDict.readHeader(atPath:)` | Reads only metadata, without loading key or record indexes. |
 | `lookup(word:)` | Returns the stored entry, usually HTML, or `nil` when the word is not found. |
 | `getKeys(limit:)` | Returns up to `limit` keys from the open file. The default limit is `100`. |
 | `locate(resource:)` | Returns an MDD resource as `Data`, or `nil` when it cannot be found or decoded. |

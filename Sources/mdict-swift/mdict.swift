@@ -15,6 +15,7 @@ import mdict_cpp
 /// ```
 public class MDict {
   private var dictHandle: UnsafeMutableRawPointer?
+  public let header: Header
 
   private static func normalizeBase64(_ value: String) -> String {
     let remainder = value.count % 4
@@ -59,13 +60,10 @@ public class MDict {
       return nil
     }
 
-    path.withCString { cPath in
-      self.dictHandle = mdict_init(cPath)
-    }
-
-    if self.dictHandle == nil {
-      return nil
-    }
+    guard let header = Self.readHeader(atPath: path) else { return nil }
+    self.header = header
+    self.dictHandle = path.withCString { mdict_init($0) }
+    guard self.dictHandle != nil else { return nil }
   }
 
   deinit {
