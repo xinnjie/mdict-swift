@@ -30,7 +30,7 @@ private struct Lookup: ParsableCommand {
       throw ValidationError("Missing required option: --path <mdx-file>")
     }
 
-    guard let dict = Mdict(path: path) else {
+    guard let dict = MDict(path: path) else {
       throw ValidationError("Failed to open dictionary at path: \(path)")
     }
 
@@ -64,7 +64,7 @@ private struct Keys: ParsableCommand {
       throw ValidationError("Missing required option: --path <mdx-file>")
     }
 
-    guard let dict = Mdict(path: path) else {
+    guard let dict = MDict(path: path) else {
       throw ValidationError("Failed to open dictionary at path: \(path)")
     }
 
