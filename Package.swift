@@ -101,9 +101,10 @@ let package = Package(
       dependencies: [
         "MDict"
       ],
-      path: "Tests/mdict-swiftTests",
+      path: "Tests",
+      sources: ["mdict-swiftTests"],
       resources: [
-        .copy("testdict.mdx")
+        .copy("testdict")
       ]
     ),
   ],

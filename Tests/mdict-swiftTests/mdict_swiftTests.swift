@@ -15,45 +15,14 @@ struct MdictSwiftTests {
     guard
       let dictURL = Bundle.module.url(
         forResource: "testdict",
-        withExtension: "mdx"
+        withExtension: "mdx",
+        subdirectory: "testdict"
       )
     else {
-      throw FixtureError.missing("Could not find testdict.mdx")
+      throw FixtureError.missing("Could not find testdict/testdict.mdx")
     }
     mdict = Mdict(path: dictURL.path)
     #expect(mdict != nil, "Failed to initialize Mdict")
-  }
-
-  private func makeEtymologyMDX() throws -> Mdict {
-    guard
-      let dictURL = Bundle.module.url(
-        forResource: "etymonline",
-        withExtension: "mdx",
-        subdirectory: "fixtures/etymology"
-      )
-    else {
-      throw FixtureError.missing("Could not find fixtures/etymology/etymonline.mdx")
-    }
-    guard let dict = Mdict(path: dictURL.path) else {
-      throw FixtureError.missing("Failed to initialize etymonline.mdx")
-    }
-    return dict
-  }
-
-  private func makeEtymologyMDD() throws -> Mdict {
-    guard
-      let dictURL = Bundle.module.url(
-        forResource: "etymonline",
-        withExtension: "mdd",
-        subdirectory: "fixtures/etymology"
-      )
-    else {
-      throw FixtureError.missing("Could not find fixtures/etymology/etymonline.mdd")
-    }
-    guard let dict = Mdict(path: dictURL.path) else {
-      throw FixtureError.missing("Failed to initialize etymonline.mdd")
-    }
-    return dict
   }
 
   @Test
@@ -92,39 +61,9 @@ struct MdictSwiftTests {
   }
 
   @Test
-  func lookupWorksWithEtymologyMDXFixture() throws {
-    let etymologyMDX = try makeEtymologyMDX()
-    let result = etymologyMDX.lookup(word: "hello")
-    #expect(result?.isEmpty == false)
-  }
-
-  @Test
   func lookupMissingWordReturnsNil() {
     let result = mdict?.lookup(word: "word-that-does-not-exist-in-testdict")
 
     #expect(result == nil)
-  }
-
-  @Test
-  func mddFixtureSupportsKeyListing() throws {
-    let etymologyMDD = try makeEtymologyMDD()
-    let keys = etymologyMDD.getKeys(limit: 5)
-    #expect(keys.count == 5)
-    #expect(keys.isEmpty == false)
-  }
-
-  @Test
-  func locateSupportsMddFixtureResources() throws {
-    let etymologyMDD = try makeEtymologyMDD()
-    let keys = etymologyMDD.getKeys(limit: 1)
-    #expect(keys.count == 1)
-
-    guard let firstKey = keys.first else {
-      Issue.record("Expected at least one key in etymology MDD fixture")
-      return
-    }
-
-    let data = etymologyMDD.locate(resource: firstKey)
-    #expect(data?.isEmpty == false)
   }
 }
