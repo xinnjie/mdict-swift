@@ -8,8 +8,8 @@ enum FixtureError: Error {
 }
 
 @Suite
-struct MdictSwiftTests {
-  private var mdict: Mdict?
+struct MDictSwiftTests {
+  private var mdict: MDict?
 
   init() throws {
     guard
@@ -21,11 +21,11 @@ struct MdictSwiftTests {
     else {
       throw FixtureError.missing("Could not find testdict/testdict.mdx")
     }
-    mdict = Mdict(path: dictURL.path)
-    #expect(mdict != nil, "Failed to initialize Mdict")
+    mdict = MDict(path: dictURL.path)
+    #expect(mdict != nil, "Failed to initialize MDict")
   }
 
-  @Test
+  @Test("Looks up an existing dictionary entry")
   func lookupZoom() {
     let result = mdict?.lookup(word: "zoom")
     let expected =
@@ -34,7 +34,7 @@ struct MdictSwiftTests {
     #expect(result == expected)
   }
 
-  @Test
+  @Test("Returns the requested number of dictionary keys")
   func getKeys() {
     let keys = mdict?.getKeys(limit: 10)
     #expect(keys != nil, "Keys should not be nil")
@@ -46,21 +46,21 @@ struct MdictSwiftTests {
     }
   }
 
-  @Test
+  @Test("Detects known MIME types and falls back for unknown extensions")
   func mimeTypeReturnsExpectedValues() {
-    #expect(Mdict.mimeType(for: "style.css") == "text/css")
-    #expect(Mdict.mimeType(for: "ICON.PNG") == "image/png")
-    #expect(Mdict.mimeType(for: "audio.mp3") == "audio/mpeg")
-    #expect(Mdict.mimeType(for: "unknown.extension") == "application/octet-stream")
+    #expect(MDict.mimeType(for: "style.css") == "text/css")
+    #expect(MDict.mimeType(for: "ICON.PNG") == "image/png")
+    #expect(MDict.mimeType(for: "audio.mp3") == "audio/mpeg")
+    #expect(MDict.mimeType(for: "unknown.extension") == "application/octet-stream")
   }
 
-  @Test
+  @Test("Returns nil when an MDD resource is missing")
   func locateMissingResourceReturnsNil() {
     let result = mdict?.locate(resource: "\\not-found-resource")
     #expect(result == nil)
   }
 
-  @Test
+  @Test("Returns nil when a dictionary word is missing")
   func lookupMissingWordReturnsNil() {
     let result = mdict?.lookup(word: "word-that-does-not-exist-in-testdict")
 

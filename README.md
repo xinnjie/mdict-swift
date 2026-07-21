@@ -9,16 +9,16 @@ A thin Swift wrapper around [MDict-cpp](https://github.com/dictlab/mdict-cpp) fo
 ## Mental model
 
 ```text
-.mdx file -> Mdict -> lookup(word:)      -> String? (usually raw HTML)
+.mdx file -> MDict -> lookup(word:)      -> String? (usually raw HTML)
                    -> getKeys(limit:)    -> [String]
 
-.mdd file -> Mdict -> locate(resource:)  -> Data?
+.mdd file -> MDict -> locate(resource:)  -> Data?
                    -> getKeys(limit:)    -> [String]
 
-filename  -> Mdict.mimeType(for:)        -> MIME type
+filename  -> MDict.mimeType(for:)        -> MIME type
 ```
 
-`Mdict` opens one file at a time. A dictionary that references external assets will typically use one `Mdict` instance for its `.mdx` content and another for the matching `.mdd` resources. The library returns the stored content; rendering dictionary HTML is the application's responsibility.
+`MDict` opens one file at a time. A dictionary that references external assets will typically use one `MDict` instance for its `.mdx` content and another for the matching `.mdd` resources. The library returns the stored content; rendering dictionary HTML is the application's responsibility.
 
 ## Requirements
 
@@ -59,7 +59,7 @@ Import the module as `MDict`.
 ```swift
 import MDict
 
-guard let dictionary = Mdict(path: "/path/to/dictionary.mdx") else {
+guard let dictionary = MDict(path: "/path/to/dictionary.mdx") else {
   fatalError("Unable to open dictionary")
 }
 
@@ -74,13 +74,13 @@ let firstKeys = dictionary.getKeys(limit: 20)
 ### Load an MDD resource
 
 ```swift
-guard let resources = Mdict(path: "/path/to/dictionary.mdd") else {
+guard let resources = MDict(path: "/path/to/dictionary.mdd") else {
   fatalError("Unable to open resources")
 }
 
 let resourceName = "\\images\\logo.png"
 if let data = resources.locate(resource: resourceName) {
-  let contentType = Mdict.mimeType(for: resourceName)
+  let contentType = MDict.mimeType(for: resourceName)
   print("Loaded \(data.count) bytes as \(contentType)")
 }
 ```
@@ -93,11 +93,11 @@ The Swift API intentionally consists of one type:
 
 | API | Result |
 | --- | --- |
-| `Mdict(path:)` | Opens an MDX or MDD file. Returns `nil` when the file is missing or cannot be parsed. |
+| `MDict(path:)` | Opens an MDX or MDD file. Returns `nil` when the file is missing or cannot be parsed. |
 | `lookup(word:)` | Returns the stored entry, usually HTML, or `nil` when the word is not found. |
 | `getKeys(limit:)` | Returns up to `limit` keys from the open file. The default limit is `100`. |
 | `locate(resource:)` | Returns an MDD resource as `Data`, or `nil` when it cannot be found or decoded. |
-| `Mdict.mimeType(for:)` | Infers a MIME type from a filename, falling back to `application/octet-stream`. |
+| `MDict.mimeType(for:)` | Infers a MIME type from a filename, falling back to `application/octet-stream`. |
 
 ## Command-line usage
 

@@ -1,14 +1,19 @@
 import Foundation
 import mdict_cpp
 
-/// Thin Swift wrapper for the C mdict API.
-/// Usage:
+/// A dictionary or resource archive backed by an MDict file.
+///
+/// Create one instance for each `.mdx` dictionary or `.mdd` resource archive.
+///
+/// Example:
 /// ```swift
-/// guard let dict = Mdict(path: "<path>/dict.mdx") else { return }
+/// guard let dict = MDict(path: "/path/to/dictionary.mdx") else {
+///   fatalError("Unable to open dictionary")
+/// }
 /// let meaning = dict.lookup(word: "hello")
 /// let firstKeys = dict.getKeys(limit: 10)
 /// ```
-public class Mdict {
+public class MDict {
   private var dictHandle: UnsafeMutableRawPointer?
 
   private static func normalizeBase64(_ value: String) -> String {
@@ -36,6 +41,17 @@ public class Mdict {
     return bytes
   }
 
+  /// Opens an MDict dictionary or resource archive.
+  ///
+  /// Example:
+  /// ```swift
+  /// guard let dictionary = MDict(path: "/path/to/dictionary.mdx") else {
+  ///   fatalError("Unable to open dictionary")
+  /// }
+  /// ```
+  ///
+  /// - Parameter path: The file-system path to an `.mdx` or `.mdd` file.
+  /// - Returns: `nil` when the file does not exist or cannot be opened as an MDict file.
   public init?(path: String) {
     // iOS paths need to be handled carefully (sandbox)
     guard FileManager.default.fileExists(atPath: path) else {
@@ -58,6 +74,20 @@ public class Mdict {
     }
   }
 
+  /// Looks up a word in an open `.mdx` dictionary.
+  ///
+  /// Example:
+  /// ```swift
+  /// guard let dictionary = MDict(path: "/path/to/dictionary.mdx") else {
+  ///   fatalError("Unable to open dictionary")
+  /// }
+  /// if let definition = dictionary.lookup(word: "hello") {
+  ///   print(definition)
+  /// }
+  /// ```
+  ///
+  /// - Parameter word: The dictionary key to look up.
+  /// - Returns: The stored definition, commonly HTML, or `nil` when no nonempty entry exists.
   public func lookup(word: String) -> String? {
     guard let handle = dictHandle else { return nil }
 
@@ -78,6 +108,16 @@ public class Mdict {
     return definition
   }
 
+  /// Loads a resource from an open `.mdd` archive.
+  ///
+  /// Example:
+  /// ```swift
+  /// let resources = MDict(path: "/path/to/dictionary.mdd")
+  /// let imageData = resources?.locate(resource: "\\images\\logo.png")
+  /// ```
+  ///
+  /// - Parameter resource: The resource key exactly as it is stored in the archive.
+  /// - Returns: The decoded resource bytes, or `nil` when the resource cannot be found or decoded.
   public func locate(resource: String) -> Data? {
     guard let handle = dictHandle else { return nil }
 
@@ -109,6 +149,16 @@ public class Mdict {
     return nil
   }
 
+  /// Infers a MIME type from a resource filename.
+  ///
+  /// Example:
+  /// ```swift
+  /// let contentType = MDict.mimeType(for: "styles/main.css")
+  /// // "text/css"
+  /// ```
+  ///
+  /// - Parameter filename: A filename or resource path whose extension identifies its media type.
+  /// - Returns: The detected MIME type, or `"application/octet-stream"` when it is unknown.
   public static func mimeType(for filename: String) -> String {
     return filename.withCString { cFilename in
       guard let cMime = c_mime_detect(cFilename) else {
@@ -118,6 +168,18 @@ public class Mdict {
     }
   }
 
+  /// Returns keys from the open dictionary or resource archive.
+  ///
+  /// Example:
+  /// ```swift
+  /// guard let dictionary = MDict(path: "/path/to/dictionary.mdx") else {
+  ///   fatalError("Unable to open dictionary")
+  /// }
+  /// let firstTwentyKeys = dictionary.getKeys(limit: 20)
+  /// ```
+  ///
+  /// - Parameter limit: The maximum number of keys to return. The default is `100`.
+  /// - Returns: Up to `limit` keys, or an empty array when no keys are available.
   public func getKeys(limit: Int = 100) -> [String] {
     guard let handle = dictHandle else { return [] }
 
