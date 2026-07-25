@@ -21,7 +21,7 @@ jobs:
       - name: Install Git LFS and curl
         run: |
           apt-get update
-          apt-get install -y git-lfs curl
+          apt-get install -y git-lfs curl make
 
       - name: Check out repository
         uses: actions/checkout@v6
