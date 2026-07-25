@@ -151,7 +151,8 @@ extension MDict.Header {
       return .utf16LittleEndian
     }
 
-    let normalized = rawValue
+    let normalized =
+      rawValue
       .filter { !$0.isWhitespace && $0 != "-" && $0 != "_" }
       .uppercased()
     switch normalized {
