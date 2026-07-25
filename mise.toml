@@ -1,0 +1,10 @@
+[tools]
+hk = "1"
+node = "24"
+
+# Keep hk installation details behind mise for local development and CI.
+[tasks.check]
+run = "hk check"
+
+[tasks.fix]
+run = "hk fix"

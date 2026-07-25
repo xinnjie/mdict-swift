@@ -29,6 +29,15 @@ jobs:
           submodules: recursive
           lfs: true
 
+      - name: Set up mise
+        uses: jdx/mise-action@v3
+
+      - name: Install Node dependencies
+        run: mise x -- npm ci
+
+      - name: Lint
+        run: make check
+
       - name: Build and test package
         uses: brightdigit/swift-build@v1.5.4
         with:
@@ -43,6 +52,15 @@ jobs:
         with:
           submodules: recursive
           lfs: true
+
+      - name: Set up mise
+        uses: jdx/mise-action@v3
+
+      - name: Install Node dependencies
+        run: mise x -- npm ci
+
+      - name: Lint
+        run: make check
 
       - name: Build and test package
         uses: brightdigit/swift-build@v1.5.4

@@ -13,7 +13,7 @@ let package = Package(
       targets: ["MDict"]),
     .executable(
       name: "mdict-cli",
-      targets: ["MDictCLI"])
+      targets: ["MDictCLI"]),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.7.0")

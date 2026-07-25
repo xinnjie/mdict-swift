@@ -1,0 +1,54 @@
+amends "package://github.com/jdx/hk/releases/download/v1.53.0/hk@1.53.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.53.0/hk@1.53.0#/Builtins.pkl"
+
+local linters = new Mapping<String, Step> {
+  ["swift-format"] {
+    glob = "**/*.swift"
+    batch = true
+    check = "swift format lint --strict --parallel {{ files }}"
+    fix = "swift format --in-place --parallel {{ files }}"
+  }
+
+  // Prefer project-local prettier via npx --no-install (see package.json).
+  ["prettier"] = (Builtins.prettier) {
+    glob = List(
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.mjs",
+      "**/*.cjs",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.mts",
+      "**/*.cts",
+      "**/*.md",
+    )
+    check = "npx --no-install prettier --check --ignore-path .gitignore -- {{ files }}"
+    check_list_files = "npx --no-install prettier --list-different --ignore-path .gitignore -- {{ files }}"
+    fix = "npx --no-install prettier --write --ignore-path .gitignore -- {{ files }}"
+  }
+}
+
+local worktreeSubmodules = new Mapping<String, Step> {
+  ["submodules"] {
+    check = "if [ \"{{is_branch_checkout}}\" = \"true\" ] && [ \"{{prev_head}}\" = \"0000000000000000000000000000000000000000\" ] && [ \"$(git rev-parse --git-dir)\" != \"$(git rev-parse --git-common-dir)\" ]; then git submodule update --init --recursive; fi"
+  }
+}
+
+hooks {
+  ["post-checkout"] {
+    steps = worktreeSubmodules
+  }
+
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps = linters
+  }
+  ["fix"] {
+    fix = true
+    steps = linters
+  }
+  ["check"] {
+    steps = linters
+  }
+}

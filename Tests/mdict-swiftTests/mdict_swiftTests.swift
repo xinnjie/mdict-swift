@@ -65,7 +65,8 @@ struct MDictSwiftTests {
   func readsHeaderOnlyMDD() throws {
     let url = try writeHeaderOnlyFile(
       extension: "mdd",
-      xml: "<Library_Data Encoding=\"\" TITLE=\"A &amp; B\" Description=\"&amp;lt;b&amp;gt;Hi&amp;lt;/b&amp;gt; &eacute; &#x1F600;\" GeneratedByEngineVersion=\"2.0\" RequiredEngineVersion=\"2.0\" Format=\"\" CreationDate=\"\" Encrypted=\"2\" KeyCaseSensitive=\"No\" Stripkey=\"Yes\" Filters=\"x\"/>"
+      xml:
+        "<Library_Data Encoding=\"\" TITLE=\"A &amp; B\" Description=\"&amp;lt;b&amp;gt;Hi&amp;lt;/b&amp;gt; &eacute; &#x1F600;\" GeneratedByEngineVersion=\"2.0\" RequiredEngineVersion=\"2.0\" Format=\"\" CreationDate=\"\" Encrypted=\"2\" KeyCaseSensitive=\"No\" Stripkey=\"Yes\" Filters=\"x\"/>"
     )
     defer { try? FileManager.default.removeItem(at: url) }
 
@@ -89,7 +90,8 @@ struct MDictSwiftTests {
   func normalizesMDXMetadata() throws {
     let url = try writeHeaderOnlyFile(
       extension: "mdx",
-      xml: "<Dictionary Encoding=\"GB2312\" Title=\"  \" Format=\"Markdown\" Encrypted=\"custom\" StripKey=\"maybe\"/>"
+      xml:
+        "<Dictionary Encoding=\"GB2312\" Title=\"  \" Format=\"Markdown\" Encrypted=\"custom\" StripKey=\"maybe\"/>"
     )
     defer { try? FileManager.default.removeItem(at: url) }
 

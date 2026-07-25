@@ -108,15 +108,15 @@ Resource names must match the keys stored in the MDD file. Use `getKeys(limit:)`
 
 The Swift API intentionally consists of one type:
 
-| API | Result |
-| --- | --- |
-| `MDict(path:)` | Opens an MDX or MDD file. Returns `nil` when the file is missing or cannot be parsed. |
-| `header` | Immutable normalized metadata captured when the file is opened. |
-| `MDict.readHeader(atPath:)` | Reads only metadata, without loading key or record indexes. |
-| `lookup(word:)` | Returns the stored entry, usually HTML, or `nil` when the word is not found. |
-| `getKeys(limit:)` | Returns up to `limit` keys from the open file. The default limit is `100`. |
-| `locate(resource:)` | Returns an MDD resource as `Data`, or `nil` when it cannot be found or decoded. |
-| `MDict.mimeType(for:)` | Infers a MIME type from a filename, falling back to `application/octet-stream`. |
+| API                         | Result                                                                                |
+| --------------------------- | ------------------------------------------------------------------------------------- |
+| `MDict(path:)`              | Opens an MDX or MDD file. Returns `nil` when the file is missing or cannot be parsed. |
+| `header`                    | Immutable normalized metadata captured when the file is opened.                       |
+| `MDict.readHeader(atPath:)` | Reads only metadata, without loading key or record indexes.                           |
+| `lookup(word:)`             | Returns the stored entry, usually HTML, or `nil` when the word is not found.          |
+| `getKeys(limit:)`           | Returns up to `limit` keys from the open file. The default limit is `100`.            |
+| `locate(resource:)`         | Returns an MDD resource as `Data`, or `nil` when it cannot be found or decoded.       |
+| `MDict.mimeType(for:)`      | Infers a MIME type from a filename, falling back to `application/octet-stream`.       |
 
 ## Command-line usage
 
