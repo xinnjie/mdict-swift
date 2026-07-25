@@ -8,24 +8,6 @@ local linters = new Mapping<String, Step> {
     check = "swift format lint --strict --parallel {{ files }}"
     fix = "swift format --in-place --parallel {{ files }}"
   }
-
-  // Prefer project-local prettier via npx --no-install (see package.json).
-  ["prettier"] = (Builtins.prettier) {
-    glob = List(
-      "**/*.js",
-      "**/*.jsx",
-      "**/*.mjs",
-      "**/*.cjs",
-      "**/*.ts",
-      "**/*.tsx",
-      "**/*.mts",
-      "**/*.cts",
-      "**/*.md",
-    )
-    check = "npx --no-install prettier --check --ignore-path .gitignore -- {{ files }}"
-    check_list_files = "npx --no-install prettier --list-different --ignore-path .gitignore -- {{ files }}"
-    fix = "npx --no-install prettier --write --ignore-path .gitignore -- {{ files }}"
-  }
 }
 
 local worktreeSubmodules = new Mapping<String, Step> {
